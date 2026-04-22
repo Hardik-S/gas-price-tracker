@@ -129,6 +129,19 @@ object GasPriceParsing {
             "sixty" to 60, "seventy" to 70, "eighty" to 80, "ninety" to 90
         )
 
+        if (
+            words.size >= 2 &&
+            words.none { it == "hundred" || it == "thousand" } &&
+            words.first() in ones &&
+            words[1] in tens
+        ) {
+            val hundreds = ones[words.first()]!! * 100
+            val remainder = words.drop(1).sumOf { word ->
+                ones[word] ?: tens[word] ?: return null
+            }
+            return hundreds + remainder
+        }
+
         var total = 0
         var current = 0
 

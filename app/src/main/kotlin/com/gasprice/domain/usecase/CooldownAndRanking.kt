@@ -102,7 +102,7 @@ object StationRanker {
 
         // Direction bonus: if station is ahead (+/- 60 degrees), add 200 points
         // If behind (> 120 degrees off heading), subtract 150
-        if (currentBearingDegrees != null && station.bearing != null) {
+        if (station.bearing != null) {
             val angleDiff = abs(station.bearing)  // station.bearing is relative to heading
             score += when {
                 angleDiff <= 60f -> 200.0
