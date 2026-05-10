@@ -175,6 +175,9 @@ Since the emulator cannot trigger Activity Recognition:
 
 ## Running Tests
 
+For a recruiter-facing verification path that avoids device-only assumptions,
+see [docs/recruiter-verification.md](docs/recruiter-verification.md).
+
 ```bash
 # Unit tests (no device required)
 ./gradlew :app:test
