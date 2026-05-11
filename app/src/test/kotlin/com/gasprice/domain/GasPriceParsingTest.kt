@@ -72,6 +72,20 @@ class GasPriceParsingTest {
     }
 
     @Test
+    fun `parse spoken pump price keeps decimal digits`() {
+        val result = parse("one point six seven nine")
+        assertEquals(167.9, result.value!!, 0.001)
+        assertEquals(ParsingStatus.SUCCESS, result.status)
+    }
+
+    @Test
+    fun `parse spoken decimal preserves leading zero`() {
+        val result = parse("one point zero nine")
+        assertEquals(109.0, result.value!!, 0.001)
+        assertEquals(ParsingStatus.SUCCESS, result.status)
+    }
+
+    @Test
     fun `parse two hundred`() {
         val result = parse("two hundred")
         assertEquals(200.0, result.value!!, 0.001)

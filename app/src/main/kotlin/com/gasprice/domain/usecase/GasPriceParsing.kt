@@ -96,12 +96,34 @@ object GasPriceParsing {
             val decPart = cleaned.substring(pointIndex + cleaned.substring(pointIndex)
                 .takeWhile { it.isLetter() }.length).trim()
             val intVal = wordsToInt(intPart) ?: return null
-            val decVal = wordsToInt(decPart) ?: return null
-            "$intVal.$decVal".toDoubleOrNull()
+            val decDigits = wordsToDecimalDigits(decPart)
+                ?: wordsToInt(decPart)?.toString()
+                ?: return null
+            "$intVal.$decDigits".toDoubleOrNull()
         } else {
             val intVal = wordsToInt(cleaned) ?: return null
             intVal.toDouble()
         }
+    }
+
+    /**
+     * Preserve decimal digits when speech recognition yields each digit as its own
+     * word, e.g. "one point six seven nine" should be 1.679, not 1.22.
+     */
+    private fun wordsToDecimalDigits(input: String): String? {
+        val words = input.trim().split(Regex("\\s+")).filter { it.isNotBlank() }
+        if (words.isEmpty()) return null
+        if (words.size == 1 && words[0].all { it.isDigit() }) return words[0]
+
+        val digitWords = mapOf(
+            "zero" to "0", "one" to "1", "two" to "2", "three" to "3", "four" to "4",
+            "five" to "5", "six" to "6", "seven" to "7", "eight" to "8", "nine" to "9"
+        )
+
+        val digits = words.map { word ->
+            digitWords[word.lowercase()] ?: return null
+        }
+        return digits.joinToString(separator = "")
     }
 
     /**
