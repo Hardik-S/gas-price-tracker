@@ -87,6 +87,9 @@ object GasPriceParsing {
             .replace(Regex("\\s+"), " ")
             .trim()
 
+        // Canadian pump prices are often spoken without "point": "one sixty seven nine".
+        tryCompactCanadianPumpPhrase(cleaned)?.let { return it }
+
         // If it contains "point" or "dot", split on it
         val pointIndex = cleaned.indexOf("point").takeIf { it >= 0 }
             ?: cleaned.indexOf("dot").takeIf { it >= 0 }
@@ -102,6 +105,27 @@ object GasPriceParsing {
             val intVal = wordsToInt(cleaned) ?: return null
             intVal.toDouble()
         }
+    }
+
+    private fun tryCompactCanadianPumpPhrase(input: String): Double? {
+        val words = input.trim().split(Regex("\\s+")).filter { it.isNotBlank() }
+        if (words.size != 4) return null
+
+        val hundreds = mapOf("one" to 1, "two" to 2, "three" to 3)
+        val tens = mapOf(
+            "twenty" to 20, "thirty" to 30, "forty" to 40, "fifty" to 50,
+            "sixty" to 60, "seventy" to 70, "eighty" to 80, "ninety" to 90
+        )
+        val ones = mapOf(
+            "zero" to 0, "one" to 1, "two" to 2, "three" to 3, "four" to 4,
+            "five" to 5, "six" to 6, "seven" to 7, "eight" to 8, "nine" to 9
+        )
+
+        val whole = (hundreds[words[0]] ?: return null) * 100 +
+            (tens[words[1]] ?: return null) +
+            (ones[words[2]] ?: return null)
+        val decimal = ones[words[3]] ?: return null
+        return whole.toDouble() + (decimal.toDouble() / 10.0)
     }
 
     /**

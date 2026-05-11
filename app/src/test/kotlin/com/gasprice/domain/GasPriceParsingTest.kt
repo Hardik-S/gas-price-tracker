@@ -72,6 +72,20 @@ class GasPriceParsingTest {
     }
 
     @Test
+    fun `parse compact Canadian spoken pump price`() {
+        val result = parse("one sixty seven nine")
+        assertEquals(167.9, result.value!!, 0.001)
+        assertEquals(ParsingStatus.SUCCESS, result.status)
+    }
+
+    @Test
+    fun `parse compact spoken price with zero before decimal`() {
+        val result = parse("one eighty zero nine")
+        assertEquals(180.9, result.value!!, 0.001)
+        assertEquals(ParsingStatus.SUCCESS, result.status)
+    }
+
+    @Test
     fun `parse two hundred`() {
         val result = parse("two hundred")
         assertEquals(200.0, result.value!!, 0.001)

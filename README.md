@@ -193,7 +193,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-recruiter-pro
 ```
 
 Unit test coverage includes:
-- `GasPriceParsingTest` — 13 cases: numeric formats, spoken words, Canadian pump prices, edge cases
+- `GasPriceParsingTest` — 15 cases: numeric formats, spoken words, compact Canadian pump prices, edge cases
 - `CooldownRankingTest` — station/global/session cooldowns, ranking by distance + bearing + recency
 
 ---
