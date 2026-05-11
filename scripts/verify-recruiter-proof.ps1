@@ -24,6 +24,23 @@ try {
         throw "Potential Google API key committed in: $($hits -join ', ')"
     }
 
+    $manualSmokePath = Join-Path $root "docs\manual-smoke-evidence.md"
+    if (-not (Test-Path -LiteralPath $manualSmokePath)) {
+        throw "Missing manual smoke evidence template: docs\manual-smoke-evidence.md"
+    }
+
+    $manualSmoke = Get-Content -LiteralPath $manualSmokePath -Raw
+    foreach ($requiredPhrase in @("Activity Recognition", "No background microphone", "local-first persistence")) {
+        if ($manualSmoke -notmatch [regex]::Escape($requiredPhrase)) {
+            throw "Manual smoke template must document: $requiredPhrase"
+        }
+    }
+
+    $runbook = Get-Content -LiteralPath (Join-Path $root "docs\recruiter-verification.md") -Raw
+    if ($runbook -notmatch [regex]::Escape("manual-smoke-evidence.md")) {
+        throw "Recruiter verification runbook must link the manual smoke evidence template."
+    }
+
     & .\gradlew.bat :app:test --no-daemon --console plain
     if ($LASTEXITCODE -ne 0) {
         exit $LASTEXITCODE

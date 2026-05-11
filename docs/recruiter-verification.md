@@ -54,6 +54,10 @@ billing account or a device.
 
 ## Device Smoke Path
 
+Use [manual-smoke-evidence.md](manual-smoke-evidence.md) to record this pass.
+The template keeps runtime evidence separate from unit-test evidence and avoids
+overclaiming Activity Recognition behavior when only an emulator was used.
+
 1. Install a debug build on a physical Android device.
 2. Grant foreground location and activity recognition.
 3. Start monitoring manually if Activity Recognition does not fire.
@@ -66,3 +70,7 @@ The app intentionally avoids background microphone access. A geofence only posts
 a notification; price capture starts after the user opens the app and taps the
 microphone. This is less convenient than automatic listening, but it keeps the
 prototype aligned with privacy expectations and Android policy.
+
+The latest proof pass adds `docs/manual-smoke-evidence.md` so a reviewer can see
+exactly what must be captured during a device run and what must not be claimed
+from emulator-only testing.

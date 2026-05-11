@@ -178,6 +178,9 @@ Since the emulator cannot trigger Activity Recognition:
 For a recruiter-facing verification path that avoids device-only assumptions,
 see [docs/recruiter-verification.md](docs/recruiter-verification.md).
 
+For a physical-device smoke pass that can be attached to a resume conversation,
+use [docs/manual-smoke-evidence.md](docs/manual-smoke-evidence.md).
+
 ```bash
 # Unit tests (no device required)
 ./gradlew :app:test
