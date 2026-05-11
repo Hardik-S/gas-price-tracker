@@ -15,6 +15,7 @@ Places billing account, or background Android sensors.
 - Microphone capture is user-initiated and scoped to the visible screen.
 - Google Places usage is isolated behind `PlacesRepository`.
 - Unit tests cover parser and cooldown/ranking behavior.
+- Cooldown tests include the no-Places-ID fallback station-key path.
 
 ## Local Setup Boundary
 

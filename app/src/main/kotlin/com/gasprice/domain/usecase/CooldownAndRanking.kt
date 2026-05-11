@@ -3,6 +3,7 @@ package com.gasprice.domain.usecase
 import com.gasprice.domain.model.GasStation
 import com.gasprice.domain.model.MonitoringSettings
 import kotlin.math.abs
+import java.util.Locale
 
 /**
  * Manages per-station and global prompt cooldowns.
@@ -17,7 +18,11 @@ class CooldownTracker {
     private var sessionPromptCount: Int = 0
 
     fun stationKey(station: GasStation): String {
-        return station.placeId ?: "${station.name}_${station.latitude.toInt()}_${station.longitude.toInt()}"
+        return station.placeId ?: listOf(
+            station.name.trim().lowercase(Locale.US),
+            station.latitude.toStableCoordinateKey(),
+            station.longitude.toStableCoordinateKey()
+        ).joinToString("_")
     }
 
     fun isOnCooldown(station: GasStation, settings: MonitoringSettings): Boolean {
@@ -49,6 +54,11 @@ class CooldownTracker {
         lastGlobalPrompt = 0L
         // Keep per-station cooldowns — they survive across sessions
     }
+}
+
+private fun Double.toStableCoordinateKey(): String {
+    // Five decimals is roughly metre-level precision and avoids whole-degree collisions.
+    return String.format(Locale.US, "%.5f", this)
 }
 
 /**

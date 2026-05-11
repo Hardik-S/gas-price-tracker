@@ -17,12 +17,17 @@ class CooldownTrackerTest {
         maxPromptsPerSession = 5
     )
 
-    private fun station(name: String, placeId: String? = null) = GasStation(
+    private fun station(
+        name: String,
+        placeId: String? = null,
+        latitude: Double = 43.0,
+        longitude: Double = -79.0
+    ) = GasStation(
         placeId = placeId,
         name = name,
         address = null,
-        latitude = 43.0,
-        longitude = -79.0
+        latitude = latitude,
+        longitude = longitude
     )
 
     @Before
@@ -77,6 +82,16 @@ class CooldownTrackerTest {
         // Different keys should not interfere
         tracker.recordPrompt(withId)
         assertFalse(tracker.isOnCooldown(withoutId, settings.copy(globalCooldownSeconds = 0)))
+    }
+
+    @Test
+    fun `fallback station key distinguishes nearby same-name stations`() {
+        val firstStation = station("Independent", latitude = 43.65321, longitude = -79.38321)
+        val secondStation = station("Independent", latitude = 43.65419, longitude = -79.38418)
+
+        tracker.recordPrompt(firstStation)
+
+        assertFalse(tracker.isOnCooldown(secondStation, settings.copy(globalCooldownSeconds = 0)))
     }
 }
 
