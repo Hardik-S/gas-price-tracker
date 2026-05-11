@@ -40,6 +40,17 @@ Expected result: Gradle runs local unit tests without an emulator. If the host
 does not have the Android SDK configured, record that as an environment blocker
 instead of treating it as an app failure.
 
+For the automation-friendly path, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-recruiter-proof.ps1
+```
+
+That script first confirms `local.properties` is not tracked, scans tracked text
+files for committed Google API-key shapes, and then runs the local unit tests.
+This preserves the recruiter-visible proof path without requiring a live Places
+billing account or a device.
+
 ## Device Smoke Path
 
 1. Install a debug build on a physical Android device.

@@ -182,6 +182,9 @@ see [docs/recruiter-verification.md](docs/recruiter-verification.md).
 # Unit tests (no device required)
 ./gradlew :app:test
 
+# Key hygiene plus unit tests
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\verify-recruiter-proof.ps1
+
 # Instrumentation tests (device/emulator required)
 ./gradlew :app:connectedAndroidTest
 ```
